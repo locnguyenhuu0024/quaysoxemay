@@ -49,7 +49,7 @@
                     { 'fillStyle': '#eae56f', 'text': 'Giải nhất' },
                     { 'fillStyle': '#89f26e', 'text': 'Giải nhì' },
                     { 'fillStyle': '#7de6ef', 'text': 'Giải ba' },
-                    { 'fillStyle': '#e7706f', 'text': 'Giải bốn' }
+                    { 'fillStyle': '#e7706f', 'text': 'Giải khuyến khích' }
                 ],
             'animation':           // Specify the animation to use.
             {
@@ -67,8 +67,8 @@
             const giaiba = 181;
             const giaibon = 271;
             
-            // Randomly choose between giaiba and giaibon
-            const randomChoice = Math.random() < 0.5 ? giaiba : giaibon;
+            // Randomly choose between giaiba and giaibon with giaibon having 75% chance
+            const randomChoice = Math.random() < 0.25 ? giaiba : giaibon;
             
             // Calculate the stop angle with a small random offset (1-88 degrees)
             let stopAt = randomChoice + Math.floor(Math.random() * 88);
