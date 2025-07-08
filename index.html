@@ -8,14 +8,37 @@
 </head>
 
 <body>
+    <div id="welcomeMessage" class="welcome-message" style="display: none;">
+        <h2>Chào mừng khách hàng <span id="customerName"></span></h2>
+    </div>
     <div class="wheel-container">
+        <div class="wheel-arrow">
+            <img src="assets/down.png" alt="Pointer" />
+        </div>
         <canvas id="canvas" width="434" height="434">
             <p align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
         </canvas>
-        <br />
-        <button id="spinButton" class="spin-button" onclick="startSpin();">QUAY NGAY</button>
+        <div class="button-group">
+            <button id="spinButton" class="spin-button" onclick="startSpin();">QUAY NGAY</button>
+            <button id="resetButton" class="reset-button" onclick="resetAndReturn();" style="display: none;">CHƠI LẠI</button>
+        </div>
     </div>
     <script>
+        // Check if customer info exists, if not redirect to form
+        document.addEventListener('DOMContentLoaded', function() {
+            const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
+            
+            if (!customerInfo) {
+                window.location.href = 'customer-form.html';
+            } else {
+                // Show welcome message
+                const welcomeMessage = document.getElementById('welcomeMessage');
+                const customerName = document.getElementById('customerName');
+                welcomeMessage.style.display = 'block';
+                customerName.textContent = customerInfo.fullName;
+            }
+        });
+
         // Create new wheel object specifying the parameters at creation time.
         let theWheel = new Winwheel({
             'numSegments': 4,     // Specify number of segments.
@@ -62,6 +85,10 @@
             // Set spinning flag
             wheelSpinning = true;
             
+            // Hide spin button and show reset button
+            document.getElementById('spinButton').style.display = 'none';
+            document.getElementById('resetButton').style.display = 'none';
+            
             // Use the new calculatePrize function
             calculatePrize();
             
@@ -69,12 +96,26 @@
         }
 
 
-        // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters
-        // note the indicated segment is passed in as a parmeter as 99% of the time you will want to know this to inform the user of their prize.
-        // -------------------------------------------------------
+        // Called when the spin animation has finished
         function alertPrize(indicatedSegment) {
-            // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
-            alert("You have won " + indicatedSegment.text);
+            // Show the prize alert
+            alert("Chúc mừng bạn đã trúng " + indicatedSegment.text);
+            
+            // Show the reset button and hide spin button
+            document.getElementById('resetButton').style.display = 'inline-block';
+            document.getElementById('spinButton').style.display = 'none';
+            
+            // Reset spinning flag
+            wheelSpinning = false;
+        }
+        
+        // Function to reset data and return to form
+        function resetAndReturn() {
+            // Clear the customer info from localStorage
+            localStorage.removeItem('customerInfo');
+            
+            // Redirect to the customer form
+            window.location.href = 'customer-form.html';
         }
     </script>
 </body>
